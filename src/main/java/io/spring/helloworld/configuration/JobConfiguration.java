@@ -3,14 +3,21 @@ package io.spring.helloworld.configuration;
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
+import org.springframework.batch.core.configuration.annotation.BatchConfigurer;
+import org.springframework.batch.core.configuration.annotation.DefaultBatchConfigurer;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.task.configuration.DefaultTaskConfigurer;
+import org.springframework.cloud.task.configuration.EnableTask;
+import org.springframework.cloud.task.configuration.TaskConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import javax.sql.DataSource;
 
 /**
  * @author David Turanski
@@ -18,12 +25,23 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @EnableBatchProcessing
+@EnableTask
 public class JobConfiguration {
 	@Autowired
 	private JobBuilderFactory jobBuilderFactory;
 
 	@Autowired
 	private StepBuilderFactory stepBuilderFactory;
+
+	@Bean
+	public BatchConfigurer batchConfigurer(DataSource dataSource) {
+		return new DefaultBatchConfigurer(dataSource);
+	}
+
+	@Bean
+	public TaskConfigurer taskConfigurer(DataSource dataSource) {
+		return new DefaultTaskConfigurer(dataSource);
+	}
 
 	@Bean
 	public Step step1() {
