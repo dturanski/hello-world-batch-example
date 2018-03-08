@@ -14,6 +14,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
@@ -24,6 +25,7 @@ import java.util.stream.Collectors;
 @SpringBootTest(
 	classes = HelloWorldApplicationTests.TestConfig.class,
 	properties = "spring.batch.job.enabled=false")
+@TestPropertySource(properties = {"spring.cloud.task.closecontext_enable=false"})
 public class HelloWorldApplicationTests {
 
 	@Autowired
